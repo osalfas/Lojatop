@@ -1,0 +1,643 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Minha Loja Online</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        /* Estilos gerais */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+        
+        :root {
+            --primary: #4361ee;
+            --primary-dark: #3a56d4;
+            --secondary: #7209b7;
+            --light: #f8f9fa;
+            --dark: #212529;
+            --gray: #6c757d;
+            --light-gray: #e9ecef;
+            --success: #4cc9f0;
+            --border-radius: 10px;
+            --shadow: 0 4px 12px rgba(0, 0, 0, 0.08);
+            --transition: all 0.3s ease;
+        }
+        
+        body {
+            background-color: #f5f7ff;
+            color: var(--dark);
+            line-height: 1.6;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Cabeçalho */
+        header {
+            background: linear-gradient(135deg, var(--primary), var(--secondary));
+            color: white;
+            padding: 20px 0;
+            box-shadow: var(--shadow);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 1.8rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .logo i {
+            color: var(--success);
+        }
+        
+        .cart-icon {
+            position: relative;
+            font-size: 1.5rem;
+            cursor: pointer;
+        }
+        
+        .cart-count {
+            position: absolute;
+            top: -8px;
+            right: -8px;
+            background-color: var(--success);
+            color: white;
+            border-radius: 50%;
+            width: 20px;
+            height: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 0.8rem;
+            font-weight: bold;
+        }
+        
+        /* Banner */
+        .banner {
+            background: linear-gradient(rgba(67, 97, 238, 0.9), rgba(114, 9, 183, 0.9)), url('https://images.unsplash.com/photo-1607082348824-0a96f2a4b9da?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1200&q=80');
+            background-size: cover;
+            background-position: center;
+            color: white;
+            padding: 60px 20px;
+            text-align: center;
+            margin-bottom: 30px;
+            border-radius: 0 0 var(--border-radius) var(--border-radius);
+        }
+        
+        .banner h1 {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+        }
+        
+        .banner p {
+            font-size: 1.2rem;
+            max-width: 700px;
+            margin: 0 auto 25px;
+        }
+        
+        /* Filtros */
+        .filters {
+            display: flex;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 15px;
+            margin-bottom: 30px;
+        }
+        
+        .filter-btn {
+            background-color: white;
+            border: 2px solid var(--light-gray);
+            padding: 10px 20px;
+            border-radius: 30px;
+            cursor: pointer;
+            font-weight: 600;
+            transition: var(--transition);
+        }
+        
+        .filter-btn:hover, .filter-btn.active {
+            background-color: var(--primary);
+            color: white;
+            border-color: var(--primary);
+        }
+        
+        /* Produtos */
+        .products-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 25px;
+            margin-bottom: 50px;
+        }
+        
+        .product-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            overflow: hidden;
+            box-shadow: var(--shadow);
+            transition: var(--transition);
+        }
+        
+        .product-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .product-image {
+            height: 200px;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .product-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: var(--transition);
+        }
+        
+        .product-card:hover .product-image img {
+            transform: scale(1.05);
+        }
+        
+        .image-nav {
+            position: absolute;
+            bottom: 10px;
+            left: 0;
+            right: 0;
+            display: flex;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        .image-dot {
+            width: 8px;
+            height: 8px;
+            border-radius: 50%;
+            background-color: rgba(255, 255, 255, 0.5);
+            cursor: pointer;
+            transition: var(--transition);
+        }
+        
+        .image-dot.active {
+            background-color: white;
+            transform: scale(1.2);
+        }
+        
+        .product-info {
+            padding: 20px;
+        }
+        
+        .product-category {
+            color: var(--gray);
+            font-size: 0.9rem;
+            margin-bottom: 5px;
+        }
+        
+        .product-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 10px;
+            height: 50px;
+            overflow: hidden;
+        }
+        
+        .product-price {
+            color: var(--primary);
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 15px;
+        }
+        
+        .product-price span {
+            color: var(--gray);
+            font-size: 1rem;
+            text-decoration: line-through;
+            margin-left: 5px;
+        }
+        
+        .product-rating {
+            color: #ffc107;
+            margin-bottom: 15px;
+        }
+        
+        .btn-buy {
+            display: block;
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 12px;
+            border-radius: var(--border-radius);
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: var(--transition);
+            text-align: center;
+            text-decoration: none;
+        }
+        
+        .btn-buy:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        /* Rodapé */
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 40px 0 20px;
+            text-align: center;
+        }
+        
+        .footer-content {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        
+        .footer-logo {
+            font-size: 1.8rem;
+            margin-bottom: 20px;
+        }
+        
+        .social-icons {
+            display: flex;
+            gap: 20px;
+            margin-bottom: 25px;
+        }
+        
+        .social-icons a {
+            color: white;
+            font-size: 1.5rem;
+            transition: var(--transition);
+        }
+        
+        .social-icons a:hover {
+            color: var(--success);
+        }
+        
+        .copyright {
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+            padding-top: 20px;
+            color: rgba(255, 255, 255, 0.7);
+            font-size: 0.9rem;
+        }
+        
+        /* Responsividade */
+        @media (max-width: 768px) {
+            .banner h1 {
+                font-size: 2rem;
+            }
+            
+            .banner p {
+                font-size: 1rem;
+            }
+            
+            .products-grid {
+                grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+                gap: 20px;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                gap: 15px;
+            }
+        }
+        
+        @media (max-width: 576px) {
+            .products-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .banner {
+                padding: 40px 20px;
+            }
+            
+            .filters {
+                gap: 10px;
+            }
+            
+            .filter-btn {
+                padding: 8px 16px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Cabeçalho -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-shopping-bag"></i>
+                <span>Minha Loja</span>
+            </div>
+            <div class="cart-icon">
+                <i class="fas fa-shopping-cart"></i>
+                <span class="cart-count">0</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- Banner -->
+    <section class="banner">
+        <div class="container">
+            <h1>As Melhores Ofertas Online</h1>
+            <p>Descubra produtos incríveis com preços especiais. Frete grátis para pedidos acima de R$ 100,00.</p>
+        </div>
+    </section>
+
+    <!-- Filtros -->
+    <div class="container">
+        <div class="filters">
+            <button class="filter-btn active" data-filter="all">Todos os Produtos</button>
+            <button class="filter-btn" data-filter="eletronicos">Eletrônicos</button>
+            <button class="filter-btn" data-filter="moda">Moda</button>
+            <button class="filter-btn" data-filter="casa">Casa e Decoração</button>
+            <button class="filter-btn" data-filter="beleza">Beleza</button>
+        </div>
+    </div>
+
+    <!-- Produtos -->
+    <main class="container">
+        <div class="products-grid" id="products-container">
+            <!-- Os produtos serão inseridos aqui via JavaScript -->
+        </div>
+    </main>
+
+    <!-- Rodapé -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div class="footer-logo">
+                    <i class="fas fa-shopping-bag"></i> Minha Loja
+                </div>
+                <p>Compre com segurança e facilidade. Entregamos em todo o Brasil.</p>
+                <div class="social-icons">
+                    <a href="#"><i class="fab fa-facebook"></i></a>
+                    <a href="#"><i class="fab fa-instagram"></i></a>
+                    <a href="#"><i class="fab fa-twitter"></i></a>
+                    <a href="#"><i class="fab fa-whatsapp"></i></a>
+                </div>
+            </div>
+            <div class="copyright">
+                &copy; 2023 Minha Loja Online. Todos os direitos reservados.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Dados dos produtos
+        const products = [
+            {
+                id: 1,
+                title: "Smartphone XYZ Pro",
+                category: "eletronicos",
+                price: 1899.99,
+                oldPrice: 2199.99,
+                rating: 4.5,
+                images: ["smartphone1.png", "smartphone2.png", "smartphone3.png", "smartphone4.png"],
+                affiliateLink: "https://exemplo.com/afiliado1"
+            },
+            {
+                id: 2,
+                title: "Fone de Ouvido Bluetooth Premium",
+                category: "eletronicos",
+                price: 299.99,
+                oldPrice: 399.99,
+                rating: 4.2,
+                images: ["fone1.png", "fone2.png", "fone3.png", "fone4.png"],
+                affiliateLink: "https://exemplo.com/afiliado2"
+            },
+            {
+                id: 3,
+                title: "Camiseta Casual Estilosa",
+                category: "moda",
+                price: 79.90,
+                oldPrice: 99.90,
+                rating: 4.0,
+                images: ["camiseta1.png", "camiseta2.png", "camiseta3.png", "camiseta4.png"],
+                affiliateLink: "https://exemplo.com/afiliado3"
+            },
+            {
+                id: 4,
+                title: "Tênis Esportivo Confortável",
+                category: "moda",
+                price: 249.90,
+                oldPrice: 299.90,
+                rating: 4.7,
+                images: ["tenis1.png", "tenis2.png", "tenis3.png", "tenis4.png"],
+                affiliateLink: "https://exemplo.com/afiliado4"
+            },
+            {
+                id: 5,
+                title: "Luminária de Mesa Moderna",
+                category: "casa",
+                price: 129.90,
+                oldPrice: 159.90,
+                rating: 4.3,
+                images: ["luminaria1.png", "luminaria2.png", "luminaria3.png", "luminaria4.png"],
+                affiliateLink: "https://exemplo.com/afiliado5"
+            },
+            {
+                id: 6,
+                title: "Kit Panelas Antiaderente",
+                category: "casa",
+                price: 299.90,
+                oldPrice: 399.90,
+                rating: 4.6,
+                images: ["panela1.png", "panela2.png", "panela3.png", "panela4.png"],
+                affiliateLink: "https://exemplo.com/afiliado6"
+            },
+            {
+                id: 7,
+                title: "Perfume Importado Elegante",
+                category: "beleza",
+                price: 189.90,
+                oldPrice: 249.90,
+                rating: 4.4,
+                images: ["perfume1.png", "perfume2.png", "perfume3.png", "perfume4.png"],
+                affiliateLink: "https://exemplo.com/afiliado7"
+            },
+            {
+                id: 8,
+                title: "Skincare Kit Completo",
+                category: "beleza",
+                price: 159.90,
+                oldPrice: 199.90,
+                rating: 4.8,
+                images: ["skincare1.png", "skincare2.png", "skincare3.png", "skincare4.png"],
+                affiliateLink: "https://exemplo.com/afiliado8"
+            }
+        ];
+
+        // Elementos do DOM
+        const productsContainer = document.getElementById('products-container');
+        const filterButtons = document.querySelectorAll('.filter-btn');
+        const cartCount = document.querySelector('.cart-count');
+
+        // Estado do carrinho
+        let cart = [];
+
+        // Função para renderizar produtos
+        function renderProducts(filter = 'all') {
+            productsContainer.innerHTML = '';
+            
+            const filteredProducts = filter === 'all' 
+                ? products 
+                : products.filter(product => product.category === filter);
+            
+            filteredProducts.forEach(product => {
+                const productElement = document.createElement('div');
+                productElement.className = 'product-card';
+                productElement.setAttribute('data-category', product.category);
+                
+                // Criar navegação de imagens
+                let imageDots = '';
+                for (let i = 0; i < product.images.length; i++) {
+                    imageDots += `<div class="image-dot ${i === 0 ? 'active' : ''}" data-index="${i}"></div>`;
+                }
+                
+                productElement.innerHTML = `
+                    <div class="product-image">
+                        <img src="${product.images[0]}" alt="${product.title}" id="product-image-${product.id}">
+                        <div class="image-nav">
+                            ${imageDots}
+                        </div>
+                    </div>
+                    <div class="product-info">
+                        <div class="product-category">${getCategoryName(product.category)}</div>
+                        <h3 class="product-title">${product.title}</h3>
+                        <div class="product-price">
+                            R$ ${product.price.toFixed(2)}
+                            <span>R$ ${product.oldPrice.toFixed(2)}</span>
+                        </div>
+                        <div class="product-rating">
+                            ${generateRatingStars(product.rating)}
+                            <span style="color: var(--gray); font-size: 0.9rem;"> (${product.rating})</span>
+                        </div>
+                        <a href="${product.affiliateLink}" target="_blank" class="btn-buy" data-id="${product.id}">
+                            <i class="fas fa-shopping-cart"></i> Comprar Agora
+                        </a>
+                    </div>
+                `;
+                
+                productsContainer.appendChild(productElement);
+                
+                // Adicionar eventos aos dots de navegação de imagem
+                const dots = productElement.querySelectorAll('.image-dot');
+                dots.forEach(dot => {
+                    dot.addEventListener('click', function() {
+                        const index = this.getAttribute('data-index');
+                        const productImage = document.getElementById(`product-image-${product.id}`);
+                        productImage.src = product.images[index];
+                        
+                        // Atualizar dots ativos
+                        dots.forEach(d => d.classList.remove('active'));
+                        this.classList.add('active');
+                    });
+                });
+            });
+            
+            // Atualizar eventos dos botões de compra
+            document.querySelectorAll('.btn-buy').forEach(button => {
+                button.addEventListener('click', function(e) {
+                    if (!this.getAttribute('href').includes('exemplo.com')) {
+                        const productId = parseInt(this.getAttribute('data-id'));
+                        addToCart(productId);
+                    }
+                });
+            });
+        }
+
+        // Função para obter nome da categoria
+        function getCategoryName(category) {
+            const categoryNames = {
+                'eletronicos': 'Eletrônicos',
+                'moda': 'Moda',
+                'casa': 'Casa e Decoração',
+                'beleza': 'Beleza'
+            };
+            return categoryNames[category] || category;
+        }
+
+        // Função para gerar estrelas de avaliação
+        function generateRatingStars(rating) {
+            let stars = '';
+            const fullStars = Math.floor(rating);
+            const hasHalfStar = rating % 1 >= 0.5;
+            
+            for (let i = 0; i < fullStars; i++) {
+                stars += '<i class="fas fa-star"></i>';
+            }
+            
+            if (hasHalfStar) {
+                stars += '<i class="fas fa-star-half-alt"></i>';
+            }
+            
+            const emptyStars = 5 - fullStars - (hasHalfStar ? 1 : 0);
+            for (let i = 0; i < emptyStars; i++) {
+                stars += '<i class="far fa-star"></i>';
+            }
+            
+            return stars;
+        }
+
+        // Função para adicionar ao carrinho
+        function addToCart(productId) {
+            const product = products.find(p => p.id === productId);
+            if (product) {
+                cart.push(product);
+                cartCount.textContent = cart.length;
+                
+                // Feedback visual
+                const button = document.querySelector(`.btn-buy[data-id="${productId}"]`);
+                const originalText = button.innerHTML;
+                button.innerHTML = '<i class="fas fa-check"></i> Adicionado!';
+                button.style.backgroundColor = '#28a745';
+                
+                setTimeout(() => {
+                    button.innerHTML = originalText;
+                    button.style.backgroundColor = '';
+                }, 2000);
+            }
+        }
+
+        // Eventos dos filtros
+        filterButtons.forEach(button => {
+            button.addEventListener('click', function() {
+                // Remover classe active de todos os botões
+                filterButtons.forEach(btn => btn.classList.remove('active'));
+                
+                // Adicionar classe active ao botão clicado
+                this.classList.add('active');
+                
+                // Filtrar produtos
+                const filter = this.getAttribute('data-filter');
+                renderProducts(filter);
+            });
+        });
+
+        // Inicializar
+        renderProducts();
+    </script>
+</body>
+</html>
